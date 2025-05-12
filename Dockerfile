@@ -1,24 +1,16 @@
-# Use the n8n image as the base
 FROM docker.n8n.io/n8nio/n8n
 
-# Switch to root to install packages
 USER root
 
-# Install Python and pip using Alpine's apk
-RUN python3 -m venv /opt/venv \
-    && /opt/venv/bin/pip install requests
+# Zainstaluj Pythona i pip z Alpine
+RUN apk add --no-cache python3 py3-pip
 
-# (opcjonalnie) dodaj do PATH, jeśli chcesz korzystać globalnie
-ENV PATH="/opt/venv/bin:$PATH"
+# Zainstaluj requests z obejściem PEP 668
+RUN pip3 install --break-system-packages requests
 
-
-# Install external Python packages
-RUN pip3 install requests
-
-# Switch back to n8n user
 USER node
 
-# Set required build args and environment variables
+# Twoje zmienne środowiskowe i uruchomienie
 ARG PGPASSWORD
 ARG PGHOST
 ARG PGPORT
@@ -34,5 +26,4 @@ ENV DB_POSTGRESDB_PASSWORD=$PGPASSWORD
 ENV N8N_LOG_LEVEL=debug
 ENV N8N_ENCRYPTION_KEY=W0rAjnjtd6
 
-# Start n8n in worker mode
 CMD ["n8n", "worker"]
