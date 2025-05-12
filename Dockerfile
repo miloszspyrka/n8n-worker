@@ -5,7 +5,12 @@ FROM docker.n8n.io/n8nio/n8n
 USER root
 
 # Install Python and pip using Alpine's apk
-RUN apk add --no-cache python3 py3-pip
+RUN python3 -m venv /opt/venv \
+    && /opt/venv/bin/pip install requests
+
+# (opcjonalnie) dodaj do PATH, jeśli chcesz korzystać globalnie
+ENV PATH="/opt/venv/bin:$PATH"
+
 
 # Install external Python packages
 RUN pip3 install requests
