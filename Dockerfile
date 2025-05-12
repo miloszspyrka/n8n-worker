@@ -4,8 +4,8 @@ FROM docker.n8n.io/n8nio/n8n
 # Switch to root to install packages
 USER root
 
-# Install Python and pip
-RUN apt-get update && apt-get install -y python3 python3-pip
+# Install Python and pip using Alpine's apk
+RUN apk add --no-cache python3 py3-pip
 
 # Install external Python packages
 RUN pip3 install requests
